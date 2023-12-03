@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="background_tiles.tsx"/>
+ <layer id="3" name="background" width="30" height="20">
+  <data encoding="base64" compression="zstd">
+   KLUv/WBgCGUEAIIGERygV3P/iGZd3rq8dXnyJVLy4QVo02hgEBYMJTsFp97eXTtTPHHE4YYXRtAfwgcXMIEDXjlvLsqTyHHjU2kxW7+1a2sWIKAQhYJcdDMggw0K12g+O5iRJ2UCVxO4MoErE3HFyRDnnJamfUlp+yHwbCABTjmcfSmjsyO8j2d0doQjzn7FHqWRU6QD
+  </data>
+ </layer>
+</map>

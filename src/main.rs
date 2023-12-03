@@ -5,7 +5,7 @@ use macroquad::{
     experimental::animation::{AnimatedSprite, Animation},
     prelude::*,
 };
-use tiled::{DefaultResourceCache, Loader};
+use tiled::{DefaultResourceCache, Loader, Map, Tileset};
 
 /// Custom Reader so that we can read tiles in wasm.
 struct TiledReader;
@@ -30,10 +30,52 @@ impl tiled::ResourceReader for TiledReader {
     }
 }
 
+fn draw_background(world_map: &Map, tileset: &Tileset, texture: &Texture2D) {
+    let background_layer = world_map
+        .layers()
+        .find(|l| l.name == "background")
+        .unwrap()
+        .as_tile_layer()
+        .unwrap();
+    for x in 0..background_layer.width().unwrap() {
+        for y in 0..background_layer.height().unwrap() {
+            if let Some(tile) = background_layer.get_tile(x as i32, y as i32) {
+                let tile_id = tile.id();
+                let tile_width = tileset.tile_width;
+                let tile_height = tileset.tile_height;
+                let spacing = tileset.spacing;
+                let margin = tileset.margin;
+                let tiles_per_row =
+                    (texture.size().x as u32 - margin + spacing) / (tile_width + spacing);
+                let tileset_texture_x = tile_id % tiles_per_row * tile_width;
+                let tileset_texture_y = tile_id / tiles_per_row * tile_height;
+
+                draw_texture_ex(
+                    &texture,
+                    (x * tile_width) as f32,
+                    (y * tile_height) as f32,
+                    WHITE,
+                    DrawTextureParams {
+                        flip_x: tile.flip_h,
+                        flip_y: tile.flip_v,
+                        source: Some(Rect::new(
+                            tileset_texture_x as f32,
+                            tileset_texture_y as f32,
+                            tile_width as f32,
+                            tile_height as f32,
+                        )),
+                        ..Default::default()
+                    },
+                )
+            }
+        }
+    }
+}
+
 #[macroquad::main("llm-playground")]
 async fn main() -> Result<()> {
     let mut loader = Loader::with_cache_and_reader(DefaultResourceCache::new(), TiledReader);
-    let map = loader.load_tmx_map("data/world.tmx")?;
+    let world_map = loader.load_tmx_map("data/world.tmx")?;
 
     let background_tileset = loader
         .load_tsx_tileset("data/background_tiles.tsx")
@@ -57,8 +99,8 @@ async fn main() -> Result<()> {
 
     // We want to be able to resize the window in such a way that the contents are always
     // aspect-preserved while always getting scaled in the best possible way.
-    let map_width = (map.width * map.tile_width) as f32;
-    let map_height = (map.height * map.tile_height) as f32;
+    let map_width = (world_map.width * world_map.tile_width) as f32;
+    let map_height = (world_map.height * world_map.tile_height) as f32;
     let render_target = render_target(map_width as u32, map_height as u32);
     render_target.texture.set_filter(FilterMode::Nearest);
 
@@ -69,46 +111,7 @@ async fn main() -> Result<()> {
     loop {
         set_camera(&render_target_camera);
 
-        // Draw the background.
-        let background_layer = map
-            .layers()
-            .find(|l| l.name == "background")
-            .unwrap()
-            .as_tile_layer()
-            .unwrap();
-        for x in 0..background_layer.width().unwrap() {
-            for y in 0..background_layer.height().unwrap() {
-                if let Some(tile) = background_layer.get_tile(x as i32, y as i32) {
-                    let tile_id = tile.id();
-                    let tile_width = background_tileset.tile_width;
-                    let tile_height = background_tileset.tile_height;
-                    let spacing = background_tileset.spacing;
-                    let margin = background_tileset.margin;
-                    let tiles_per_row = (background_texture.size().x as u32 - margin + spacing)
-                        / (tile_width + spacing);
-                    let tileset_texture_x = tile_id % tiles_per_row * tile_width;
-                    let tileset_texture_y = tile_id / tiles_per_row * tile_height;
-
-                    draw_texture_ex(
-                        &background_texture,
-                        (x * tile_width) as f32,
-                        (y * tile_height) as f32,
-                        WHITE,
-                        DrawTextureParams {
-                            flip_x: tile.flip_h,
-                            flip_y: tile.flip_v,
-                            source: Some(Rect::new(
-                                tileset_texture_x as f32,
-                                tileset_texture_y as f32,
-                                tile_width as f32,
-                                tile_height as f32,
-                            )),
-                            ..Default::default()
-                        },
-                    )
-                }
-            }
-        }
+        draw_background(&world_map, &background_tileset, &background_texture);
 
         // Draw characters.
         draw_texture_ex(

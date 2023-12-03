@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="1">
  <tileset firstgid="1" source="background_tiles.tsx"/>
- <layer id="3" name="background" width="30" height="20">
+ <layer id="5" name="pond" width="30" height="20">
   <data encoding="base64" compression="zstd">
-   KLUv/WBgCGUEAIIGERygV3P/iGZd3rq8dXnyJVLy4QVo02hgEBYMJTsFp97eXTtTPHHE4YYXRtAfwgcXMIEDXjlvLsqTyHHjU2kxW7+1a2sWIKAQhYJcdDMggw0K12g+O5iRJ2UCVxO4MoErE3HFyRDnnJamfUlp+yHwbCABTjmcfSmjsyO8j2d0doQjzn7FHqWRU6QD
+   KLUv/WBgCF0AACBSAAAAAQBZ2XdE
+  </data>
+ </layer>
+ <layer id="6" name="first level land" width="30" height="20">
+  <data encoding="base64" compression="zstd">
+   KLUv/WBgCNUGAHKEDxigqzGxP6BDfYJf3yZNrMJgkh3u2Y2UMgW7uGu0Ad3mkl0k8h9qJdTCpxcw0v/M3goNv/C7XA1qRs6L8icHR6DAdMscUIIViKS4AQUm+EliswfKbk/yyf34P8+dRxobKsmid0h/SYACd+dfMxsJ5yIRBOPibA/qvLEyoBnSVP1FaAlTg++Drh6/87qV5I4k83LHF7JGJIvybzYM63mT7ZeM8hKYdpluy2TbWJ17SD9laycCA0qwlwLzlEtMdV+PrIZB2Cus9ZmODePQgq4j76sX0PYNTmpq
+  </data>
+ </layer>
+ <layer id="8" name="second level land" width="30" height="20">
+  <data encoding="base64" compression="zstd">
+   KLUv/WBgCEUCABQCAJeGAKEAAACio6cAAQAAAAIDABEAAAASIwAmMQAAADMADaAwmqYeQAI3WBxDSO2M0j59IrH7QWr3A+DvR48bMD3dAKg9BA==
+  </data>
+ </layer>
+ <layer id="9" name="paths" width="30" height="20">
+  <data encoding="base64" compression="zstd">
+   KLUv/WBgCJ0DAPAAHw0AAAAuDgAdHi0QAABAAC0+LS0vDQ0tHwAtDR0moADdatCCk9HUA2lUyuQpqLg2aiEXW0U8Vgk1ONyB4Yaav1OGSR+Yr0waRlvZvonSUyc06xQE367SkMEhpxWE8tJzZ4jJ7qA0pauhtF7S0M2OmlE=
+  </data>
+ </layer>
+ <layer id="7" name="buildings and stuff" width="30" height="20">
+  <data encoding="base64" compression="zstd">
+   KLUv/WBgCF0IAFLGFB2gKY0B/w8/9DazaNZsjGy2kQR8bgTzpCUgkreTpwbLBxAF2YIBu8MZYXVGXhE/Y72w8OWBd3IojbM2xb9IfsAls7q9jSBPCP/1qu9MJV6bf5lzW6CwXkMbgAJDJEP1PUDBGYIqlFLuE+pW4sboOj0aaR19w9BbROoOOVnTuzvZLikbziF7SA5KYfde4X00StbNApKW89sRfJTGEyRHirvY+gHpfBMdyxwM3fbgZKZ3F3IfQuruYf216FqGjgR/ce4pglPX5ow1ThiG0e9FnAs7bumGc829y4IoZ+6E1O7qeLhw1Wgz1xeLhDr47lQe8DMk81sNYfkh3u5CZNejhWi6bumrA6FCDw==
   </data>
  </layer>
 </map>

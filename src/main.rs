@@ -1,8 +1,11 @@
 use std::io::Cursor;
 
 use anyhow::Result;
-use macroquad::prelude::*;
-use tiled::{DefaultResourceCache, Loader, Tile};
+use macroquad::{
+    experimental::animation::{AnimatedSprite, Animation},
+    prelude::*,
+};
+use tiled::{DefaultResourceCache, Loader};
 
 /// Custom Reader so that we can read tiles in wasm.
 struct TiledReader;
@@ -37,11 +40,36 @@ async fn main() -> Result<()> {
         .unwrap();
 
     let background_texture = load_texture("data/MasterSimple.png").await.unwrap();
+    background_texture.set_filter(FilterMode::Nearest);
+
+    let mut char1_idle_sprite = AnimatedSprite::new(
+        16,
+        16,
+        &[Animation {
+            name: "idle".to_string(),
+            row: 0,
+            frames: 4,
+            fps: 5,
+        }],
+        true,
+    );
+    let char1_idle_texture = load_texture("data/char1_idle.png").await?;
+
+    // We want to be able to resize the window in such a way that the contents are always
+    // aspect-preserved while always getting scaled in the best possible way.
+    let map_width = (map.width * map.tile_width) as f32;
+    let map_height = (map.height * map.tile_height) as f32;
+    let render_target = render_target(map_width as u32, map_height as u32);
+    render_target.texture.set_filter(FilterMode::Nearest);
+
+    let mut render_target_camera =
+        Camera2D::from_display_rect(Rect::new(0.0, 0.0, map_width, map_height));
+    render_target_camera.render_target = Some(render_target.clone());
 
     loop {
-        clear_background(BLACK);
+        set_camera(&render_target_camera);
 
-        // Draw the background
+        // Draw the background.
         let background_layer = map
             .layers()
             .find(|l| l.name == "background")
@@ -81,6 +109,40 @@ async fn main() -> Result<()> {
                 }
             }
         }
+
+        // Draw characters.
+        draw_texture_ex(
+            &char1_idle_texture,
+            100.0,
+            100.0,
+            WHITE,
+            DrawTextureParams {
+                dest_size: Some(char1_idle_sprite.frame().dest_size),
+                source: Some(char1_idle_sprite.frame().source_rect),
+                ..Default::default()
+            },
+        );
+
+        char1_idle_sprite.update();
+
+        // Draw FPS.
+        draw_text(format!("FPS: {}", get_fps()).as_str(), 8., 16., 16., WHITE);
+
+        set_default_camera();
+        clear_background(BLACK);
+
+        let zoom = f32::min(screen_width() / map_width, screen_height() / map_height);
+        draw_texture_ex(
+            &render_target.texture,
+            (screen_width() - (map_width * zoom)) * 0.5,
+            (screen_height() - (map_height * zoom)) * 0.5,
+            WHITE,
+            DrawTextureParams {
+                dest_size: Some(vec2(map_width * zoom, map_height * zoom)),
+                flip_y: true, // Must flip y otherwise 'render_target' will be upside down
+                ..Default::default()
+            },
+        );
 
         next_frame().await
     }

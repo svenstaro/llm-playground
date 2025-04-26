@@ -47,7 +47,7 @@ fn draw_background(world_map: &Map, tileset: &Tileset, texture: &Texture2D) {
                     let tileset_texture_y = tile_id / tiles_per_row * tile_height;
 
                     draw_texture_ex(
-                        &texture,
+                        texture,
                         (x * tile_width) as f32,
                         (y * tile_height) as f32,
                         WHITE,
